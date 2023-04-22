@@ -1,10 +1,11 @@
 using HtmlAgilityPack;
 
-var categoria = "Geladeira"; // categoria que você deseja pesquisar
+string categoria = "Geladeira";
+int page = 1;
 
 Dictionary<string, string> _dict = new Dictionary<string, string>();
 
-var url = $"https://www.buscape.com.br/search?q={categoria}&page=2";
+var url = $"https://www.buscape.com.br/search?q={categoria}&page={page}";
 
 var httpClient = new HttpClient();
 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
@@ -37,6 +38,7 @@ foreach (var item in result)
 {
     Console.WriteLine(item.Key);
     Console.WriteLine(item.Value);
+    Console.WriteLine("___________________");
 }
 
 Console.ReadKey();
