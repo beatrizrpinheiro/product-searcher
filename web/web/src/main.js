@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+export const bus = new Vue();
 
 //Importing Bootstrap and BootstrapVue CSS files
 import 'bootstrap/dist/css/bootstrap.css'

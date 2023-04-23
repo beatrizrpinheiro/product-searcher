@@ -12,10 +12,10 @@
         </b-nav-item-dropdown>
 
        <b-nav-item-dropdown text="Categorias" right>
-          <b-dropdown-item href="#">Geladeira</b-dropdown-item>
-          <b-dropdown-item href="#">TV</b-dropdown-item>
-          <b-dropdown-item href="#">Celular</b-dropdown-item>
-        </b-nav-item-dropdown>
+         <b-dropdown-item @click="getProducts('Geladeira')">Geladeira</b-dropdown-item>
+         <b-dropdown-item @click="getProducts('TV')">TV</b-dropdown-item>
+         <b-dropdown-item @click="getProducts('Celular')">Celular</b-dropdown-item>
+       </b-nav-item-dropdown>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -37,10 +37,17 @@
 
 <script>
 import Products from './components/Products.vue';
+import {bus} from "./main";
 
 export default{
   components:{
     Products
+  },
+
+  methods:{
+    getProducts(category){
+bus.$emit("loadProducts", category);
+    }
   }
 }
 </script>

@@ -33,6 +33,8 @@
   
   <script type="js">
   import axios from "axios";
+  import {bus} from "../main";
+
 
   export default {
     name: 'MyCard',
@@ -42,10 +44,18 @@
       }
     },
 
-    mounted(){
-        axios.get('https://localhost:44369/Buscape/products/?categoria=geladeira&page=1')
-        .then(data => { this.items = data.data});
+    created() {
+      const vm = this;
+      bus.$on('loadProducts', (category) => {
+      vm.getProducts(category);
+    })
+    },
 
+methods: {
+  getProducts(category) {
+    axios.get(`https://localhost:44369/Buscape/products/?categoria=${category}&page=1`)
+      .then(data => { this.items = data.data });
+  }
     }
 }
   </script>

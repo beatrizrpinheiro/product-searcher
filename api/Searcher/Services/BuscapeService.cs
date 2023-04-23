@@ -67,12 +67,12 @@ namespace Searcher.Services
                 }
             }
 
-            var retorno = AddSearchResultsAsync(listaProdutos, category);
+         AddSearchResultsAsync(listaProdutos, category);
 
-            return retorno;
+            return listaProdutos;
         }
 
-        public List<Product> AddSearchResultsAsync(List<Product> listaProdutos, string category)
+       private void AddSearchResultsAsync(List<Product> listaProdutos, string category)
         {
             var products = new List<Product>();
 
@@ -94,7 +94,6 @@ namespace Searcher.Services
             _context.Product.AddRange(products);
             _context.SaveChanges();
 
-            return _context.Product.ToList();
         }
     }
 }
