@@ -1,7 +1,9 @@
-﻿namespace Searcher.Services
+﻿using Searcher.Models;
+
+namespace Searcher.Services
 {
     public interface IBuscapeService
     {
-        Dictionary<string, string> SearchProducts(string categoria, int page);
+        List<Product> SearchProducts(string categoria, int page);
     }
 }

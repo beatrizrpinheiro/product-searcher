@@ -27,8 +27,20 @@
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
+
+  <Products/>
 </div>
 </template>
 
 <style lang="scss">
 </style>
+
+<script>
+import Products from './components/Products.vue';
+
+export default{
+  components:{
+    Products
+  }
+}
+</script>

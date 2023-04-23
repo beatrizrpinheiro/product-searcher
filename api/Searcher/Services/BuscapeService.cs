@@ -1,5 +1,9 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Searcher.Data;
+using Searcher.Models;
+using System.Globalization;
 
 namespace Searcher.Services
 {
@@ -7,16 +11,20 @@ namespace Searcher.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
+        private readonly SearcherContext _context;
+        private readonly DbContextOptions<SearcherContext> _dbContextOptions;
 
-        public BuscapeService(IConfiguration configuration)
+        public BuscapeService(IConfiguration configuration, DbContextOptions<SearcherContext> dbContextOptions, SearcherContext context)
         {
             _httpClient = new HttpClient();
             _configuration = configuration;
+            _dbContextOptions = dbContextOptions;
+            _context = context;
         }
 
-        public Dictionary<string, string> SearchProducts(string category, int page)
+        public List<Product> SearchProducts(string category, int page)
         {
-            var dict = new Dictionary<string, string>();
+            List<Product> listaProdutos = new List<Product>();
             var url = $"https://www.buscape.com.br/search?q={category}&page={page}";
 
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
@@ -39,13 +47,56 @@ namespace Searcher.Services
                     .FirstOrDefault(node => node.GetAttributeValue("data-testid", "product-card::price")
                     .Contains("product-card::price"))?.InnerText.Trim();
 
-                if (name != null && price != null && !dict.ContainsKey(name) && price != "TV" && !price.Contains("resultados"))
-                    dict.Add(name, price);
+                var imageUrl = product.Descendants("img")
+                    .FirstOrDefault(node => node.GetAttributeValue("data-testid", "product-card::imageUrl")
+                    .Contains("product-card::imageUrl"))?.GetAttributeValue("src", "");
+
+                if (name != null && price != null && !listaProdutos.Any(x => x.Name == name) && price != "TV" && !price.Contains("resultados"))
+                {
+                    decimal priceResult;
+                    string valorSemFormatacao = price.Replace(".", "").Replace(",", ".").Replace("R$", "");
+                    decimal.TryParse(valorSemFormatacao, NumberStyles.Currency, CultureInfo.InvariantCulture, out priceResult);
+
+                    listaProdutos.Add(new Product
+                    {
+                        Name = name,
+                        Price = priceResult,
+                        ImageUrl = imageUrl,
+                        Site = "Buscapé"
+                    });
+                }
             }
 
-            return dict;
+            var retorno = AddSearchResultsAsync(listaProdutos, category);
+
+            return retorno;
         }
 
+        public List<Product> AddSearchResultsAsync(List<Product> listaProdutos, string category)
+        {
+            var products = new List<Product>();
+
+            foreach (var item in listaProdutos)
+            {
+                products.Add(new Product
+                {
+                    Name = item.Name,
+                    Price = item.Price,
+                    Description = item.Description != null ? item.Description : "",
+                    Category = category,
+                    Site =  item.Site,
+                    ImageUrl = item.ImageUrl,
+                    SearchTerm = category,
+                    SearchDate = DateTime.Now
+                });
+            }
+
+            _context.Product.AddRange(products);
+            _context.SaveChanges();
+
+            return _context.Product.ToList();
+        }
     }
 }
+
 
