@@ -67,12 +67,12 @@ namespace Searcher.Services
                 }
             }
 
-         AddSearchResultsAsync(listaProdutos, category);
+            AddSearchResultsAsync(listaProdutos, category);
 
             return listaProdutos;
         }
 
-       private void AddSearchResultsAsync(List<Product> listaProdutos, string category)
+        private void AddSearchResultsAsync(List<Product> listaProdutos, string category)
         {
             var products = new List<Product>();
 
@@ -84,7 +84,7 @@ namespace Searcher.Services
                     Price = item.Price,
                     Description = item.Description != null ? item.Description : "",
                     Category = category,
-                    Site =  item.Site,
+                    Site = item.Site,
                     ImageUrl = item.ImageUrl,
                     SearchTerm = category,
                     SearchDate = DateTime.Now
