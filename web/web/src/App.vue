@@ -72,8 +72,8 @@ export default {
   },
 
   watch: {
-    searchTerm: function () {
-      this.searchProducts();
+    searchTerm: function (val) {
+      if (!val) this.searchProducts();
     },
   },
 };

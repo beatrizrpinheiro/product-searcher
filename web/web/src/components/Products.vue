@@ -85,6 +85,7 @@ methods: {
 
   watch:{
     filterText: function(val) {
+      this.items = this.originalItems;
       if(val)
       this.items = this.filterProducts();
       else
