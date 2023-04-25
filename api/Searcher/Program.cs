@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IBuscapeService, BuscapeService>();
+builder.Services.AddScoped<IMercadoLivreService, MercadoLivreService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
