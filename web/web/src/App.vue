@@ -6,9 +6,13 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item-dropdown text="Web" right>
-            <b-dropdown-item href="#">Todas</b-dropdown-item>
-            <b-dropdown-item href="#">Mercado Livre</b-dropdown-item>
-            <b-dropdown-item href="#">Buscapé</b-dropdown-item>
+            <b-dropdown-item>Todas</b-dropdown-item>
+            <b-dropdown-item @click="getMercadoLivre('MercadoLivre')"
+              >Mercado Livre</b-dropdown-item
+            >
+            <b-dropdown-item @click="getBuscape('Buscape')"
+              >Buscapé</b-dropdown-item
+            >
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown text="Categorias" right>
@@ -39,7 +43,6 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-
     <Products ref="products" />
   </div>
 </template>
@@ -58,12 +61,21 @@ export default {
   data() {
     return {
       searchTerm: "",
+      plataforma: "",
     };
   },
 
   methods: {
+    getMercadoLivre() {
+      this.plataforma = `MercadoLivre`;
+    },
+
+    getBuscape() {
+      this.plataforma = `Buscape`;
+    },
+
     getProducts(category) {
-      bus.$emit("loadProducts", category);
+      bus.$emit("loadProducts", { category, plataforma: this.plataforma });
     },
 
     searchProducts() {

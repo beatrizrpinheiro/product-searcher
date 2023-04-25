@@ -80,10 +80,10 @@
     },
 
 methods: {
-  getProducts(category) {
+  getProducts(object) {
     this.items = [];
     this.isLoading = true;
-    axios.get(`https://localhost:44369/Buscape/products/?categoria=${category}&page=1`)
+    axios.get(`https://localhost:44369/${object.plataforma}/products/?categoria=${object.category}&page=1`)
       .then(data => { this.items = data.data; this.originalItems=data.data; this.isLoading=false});
   },
 

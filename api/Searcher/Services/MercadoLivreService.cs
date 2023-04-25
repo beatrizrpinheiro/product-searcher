@@ -33,9 +33,9 @@ namespace Searcher.Services
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
 
-            var products = htmlDocument.DocumentNode.Descendants("li")
-                .Where(node => node.GetAttributeValue("class", "ui-search-layout__item")
-                .Equals("ui-search-layout__item")).ToList();
+            var products = htmlDocument.DocumentNode.Descendants("ol")
+                .Where(node => node.GetAttributeValue("class", "ui-search-layout ui-search-layout--grid")
+                .Equals("ui-search-layout ui-search-layout--grid")).ToList();
 
             foreach (var product in products)
             {
@@ -48,8 +48,8 @@ namespace Searcher.Services
                     .Contains("price-tag-amount"))?.InnerText.Trim();
 
                 var imageUrl = product.Descendants("img")
-                    .FirstOrDefault(node => node.GetAttributeValue("class", "ui-search-result-image__element")
-                    .Contains("ui-search-result-image__element"))?.GetAttributeValue("src", "");
+                    .FirstOrDefault(node => node.GetAttributeValue("class", "ui-search-result-image__element shops__image-element")
+                    .Contains("ui-search-result-image__element shops__image-element"))?.GetAttributeValue("src", "");
 
                 if (name != null && price != null && !listaProdutos.Any(x => x.Name == name) && price != "TV" && !price.Contains("resultados"))
                 {
